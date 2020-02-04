@@ -10,6 +10,44 @@
     <title>Journal</title>
   </head>
   <body>
+    <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js"></script>
+
     <div id="root"></div>
   </body>
-</html>
+  	<script>
+			var config = {
+				apiKey: "AIzaSyBljVtRAbzvQMdzIskfxb_HSUrs5vKcNBk",
+				authDomain: "react-journal-cf451.firebaseapp.com",
+				databaseURL: "https://react-journal-cf451.firebaseio.com",
+				projectId: "react-journal-cf451",
+				storageBucket: "react-journal-cf451.appspot.com",
+				messagingSenderId: "768206838911"
+			};
+			firebase.initializeApp(config);
+
+			var dbRef = firebase.database().ref('entries');
+
+			dbRef.on('value', gotData, errData);
+			// TODO[x]: Format blog div sizes (and inner text size) for Mobile
+			// TODO[]: Research most efficient method for Dad to upload new blogs (potentially a web text editor with a user login page)
+			// TODO[]: Find a way to take firebase data and CREATE a new file so dad could write once and update site easily
+			function gotData(data) {
+				// console.log(data.val());
+
+				var journal = data.val();
+				var keys = Object.keys(journal);
+				console.log(keys);
+
+				// for (var i = 0; i < keys.length; i++) {
+				// 	var k = keys[i];
+				// }
+			}
+
+			function errData(err) {
+				console.log("Error: " +err);
+			}
+
+			window.addEventListener('resize', gotData);
+
+	</script>
+</html>9
