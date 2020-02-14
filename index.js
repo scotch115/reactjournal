@@ -33,26 +33,28 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <div className="container box" style={{ backgroundColor: "white" }}>
         <div className="title">
           <Hello name={this.state.name} />
         </div>
         <div className="subtitle">
           <Today date={this.state.date} />
         </div>
-        <p>Begin your day here:</p>
-        <ReactQuill 
-          theme={this.state.theme}
-          onChange={this.handleChange}
-          value={this.state.editorHtml}
-          modules={App.modules}
-          formats={App.formats}
-          bounds={'.app'}
-          placeholder={this.props.placeholder}
-         />
+        <div>
+          <p>Begin your day here:</p>
+          <ReactQuill 
+            theme={this.state.theme}
+            onChange={this.handleChange}
+            value={this.state.editorHtml}
+            modules={App.modules}
+            formats={App.formats}
+            bounds={'.app'}
+            placeholder={this.props.placeholder}
+          />
          <br />
          <button className="button">Save entry</button>
-      </div>
+         </div>
+       </div>
     );
   }
 }

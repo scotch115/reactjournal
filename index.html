@@ -50,4 +50,41 @@
 			window.addEventListener('resize', gotData);
 
 	</script>
-</html>9
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const $modal = Array.prototype.slice.call(document.querySelectorAll('.modal'), 0);
+    const $delete = Array.prototype.slice.call(document.querySelectorAll('.delete'), 0);
+    if ($delete.length > 0)
+    {
+      $delete.forEach( el => {
+        el.addEventListener('click', () => {
+          const targetDelete = el.dataset.target;
+          const $targetDelete = document.getElementById(targetDelete);
+
+          el.classList.toggle('is-active');
+          $targetDelete.classList.toggle('is-active');
+          $modal.classList.toggle('is-active');
+        });
+      });
+    }
+  });
+</script>
+<script>
+  document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") {
+    fetch(`/index.html?_=${Date.now()}`)
+      .then(res => res.text())
+      .then(htmlString => {
+        let doc = new DOMParser().parseFromString(htmlString, "text/html");
+        let latestVersion = doc
+          .querySelector("meta[name='app-version']")
+          .getAttribute("content");
+
+        if (latestVersion !== currentVersion) {
+          window.location.reload(true);
+        }
+      });
+    }
+  });
+</script>
+</html>
