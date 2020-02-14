@@ -54,6 +54,13 @@ class App extends Component {
          <br />
          <button className="button">Save entry</button>
          </div>
+         <div className="container box">
+         <p className="subtitle">Past Entries</p>
+          <div className="tile is-ancestor">
+            <div className="tile is-vertical is-parent" id="tileParent">
+			      </div>
+          </div>
+         </div>
        </div>
     );
   }

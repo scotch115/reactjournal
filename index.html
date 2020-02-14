@@ -38,9 +38,19 @@
 				var keys = Object.keys(journal);
 				console.log(keys);
 
-				// for (var i = 0; i < keys.length; i++) {
-				// 	var k = keys[i];
-				// }
+				for (var i = 0; i < keys.length; i++) {
+					var k = keys[i];
+          var title = journal[k].title;
+          var articleBody = journal[k].articleBody;
+          var article = document.createElement("tile");
+          article.innerHTML += '<article className="tile is-child box">';
+          article.innerHTML += '<p className="title">'+title+'</p>';
+          article.innerHTML += articleBody;
+          article.innerHTML += '</article>';
+          document.getElementById('tileParent').appendChild(article);
+				}
+
+
 			}
 
 			function errData(err) {
