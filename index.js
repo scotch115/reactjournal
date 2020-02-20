@@ -5,17 +5,23 @@ import Today from './Date';
 import PropTypes from 'prop-types';
 import ReactQuill from 'react-quill';
 import './style.css';
+import firebase from 'firebase';
+import { DB_CONFIG } from './config.js';
 
 class App extends Component {
   constructor(props) {
     super(props);
+		this.app = firebase.initializeApp(DB_CONFIG);
+		this.database = this.app.database().ref().child('entries');
+
     var date = new Date();
     var today = (date.getMonth()+1)+'/'+date.getDate()+'/'+date.getFullYear();
     this.state = {
       name: 'Jordan',
       date: today,
       editorHtml: '',
-      theme: 'snow'
+      theme: 'snow',
+			speed: 10
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -31,6 +37,24 @@ class App extends Component {
     }
   }
 
+	componentDidMount() {
+		this.database.on('value', snap({
+			var journal = this.database.val();
+			var keys = this.database.Object.keys(journal);
+
+			for (var i = 0; i < keys.length; i++) {
+				var k = keys[i];
+				var title = journal[k].title;
+				var articleBody = journal[k].articleBody;
+				var article = document.createElement("div");
+				article.innerHTML += '<article className="tile is-child box">';
+				article.innerHTML += '<p className="title is-5">'+title+'</p>';
+				article.innerHTML += articleBody;
+				article.innerHTML += '</article>';
+				document.getElementById('tileContainer').appendChild(article);
+		});
+	}
+
   render() {
     return (
       <div className="container box" style={{ backgroundColor: "white", height: "100vh" }}>
@@ -42,7 +66,7 @@ class App extends Component {
         </div>
         <div>
           <p>Begin your day here:</p>
-          <ReactQuill 
+          <ReactQuill
             theme={this.state.theme}
             onChange={this.handleChange}
             value={this.state.editorHtml}
@@ -72,7 +96,7 @@ App.modules = {
     [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
     [{size: []}],
     ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-    [{'list': 'ordered'}, {'list': 'bullet'}, 
+    [{'list': 'ordered'}, {'list': 'bullet'},
      {'indent': '-1'}, {'indent': '+1'}],
     ['link', 'image', 'video'],
     ['clean']
@@ -82,7 +106,7 @@ App.modules = {
     matchVisual: false,
   }
 }
-/* 
+/*
  * Quill editor formats
  * See https://quilljs.com/docs/formats/
  */
@@ -93,7 +117,7 @@ App.formats = [
   'link', 'image', 'video'
 ]
 
-/* 
+/*
  * PropType validation
  */
 App.propTypes = {
