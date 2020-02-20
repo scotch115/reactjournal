@@ -54,10 +54,11 @@ class App extends Component {
          <br />
          <button className="button" onclick="save">Save entry</button>
          </div>
-         <div className="container box">
-         <p className="subtitle">Past Entries</p>
+         <br />
+         <div className="container box" style={{backgroundColor: "white"}}>
+         <p className="title is-4">Past Entries</p>
           <div className="tile is-ancestor">
-            <div className="tile is-vertical is-parent" id="tileParent">
+            <div className="tile is-vertical is-parent" id="tileContainer">
 			      </div>
           </div>
          </div>

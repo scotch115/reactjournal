@@ -13,7 +13,7 @@
     <title>Journal</title>
   </head>
   <body>
-    <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
 
     <div id="root"></div>
   </body>
@@ -34,9 +34,6 @@
 			var dbRef = firebase.database().ref('entries');
 
 			dbRef.on('value', gotData, errData);
-			// TODO[x]: Format blog div sizes (and inner text size) for Mobile
-			// TODO[]: Research most efficient method for Dad to upload new blogs (potentially a web text editor with a user login page)
-			// TODO[]: Find a way to take firebase data and CREATE a new file so dad could write once and update site easily
 			function gotData(data) {
 				// console.log(data.val());
 
@@ -48,12 +45,12 @@
 					var k = keys[i];
           var title = journal[k].title;
           var articleBody = journal[k].articleBody;
-          var article = document.createElement("tile");
+          var article = document.createElement("div");
           article.innerHTML += '<article className="tile is-child box">';
-          article.innerHTML += '<p className="title">'+title+'</p>';
+          article.innerHTML += '<p className="title is-5">'+title+'</p>';
           article.innerHTML += articleBody;
           article.innerHTML += '</article>';
-          document.getElementById('tileParent').appendChild(article);
+          document.getElementById('tileContainer').appendChild(article);
 				}
 
 
@@ -73,41 +70,22 @@
 			window.addEventListener('resize', gotData);
 
 	</script>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const $modal = Array.prototype.slice.call(document.querySelectorAll('.modal'), 0);
-    const $delete = Array.prototype.slice.call(document.querySelectorAll('.delete'), 0);
-    if ($delete.length > 0)
-    {
-      $delete.forEach( el => {
-        el.addEventListener('click', () => {
-          const targetDelete = el.dataset.target;
-          const $targetDelete = document.getElementById(targetDelete);
+  <script>
+    document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      fetch(`/index.html?_=${Date.now()}`)
+        .then(res => res.text())
+        .then(htmlString => {
+          let doc = new DOMParser().parseFromString(htmlString, "text/html");
+          let latestVersion = doc
+            .querySelector("meta[name='app-version']")
+            .getAttribute("content");
 
-          el.classList.toggle('is-active');
-          $targetDelete.classList.toggle('is-active');
-          $modal.classList.toggle('is-active');
+          if (latestVersion !== currentVersion) {
+            window.location.reload(true);
+          }
         });
-      });
-    }
-  });
-</script>
-<script>
-  document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "visible") {
-    fetch(`/index.html?_=${Date.now()}`)
-      .then(res => res.text())
-      .then(htmlString => {
-        let doc = new DOMParser().parseFromString(htmlString, "text/html");
-        let latestVersion = doc
-          .querySelector("meta[name='app-version']")
-          .getAttribute("content");
-
-        if (latestVersion !== currentVersion) {
-          window.location.reload(true);
-        }
-      });
-    }
-  });
-</script>
+      }
+    });
+  </script>
 </html>
