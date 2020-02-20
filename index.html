@@ -60,6 +60,13 @@
 				console.log("Error: " +err);
 			}
 
+      function save(date, article) {
+        dbRef.set({
+          title: date,
+          articleBody: article
+        });
+      }
+
 			window.addEventListener('resize', gotData);
 
 	</script>

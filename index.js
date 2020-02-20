@@ -10,7 +10,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     var date = new Date();
-    var today = date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear();
+    var today = (date.getMonth()+1)+'/'+date.getDate()+'/'+date.getFullYear();
     this.state = {
       name: 'Jordan',
       date: today,
@@ -52,7 +52,7 @@ class App extends Component {
             placeholder={this.props.placeholder}
           />
          <br />
-         <button className="button">Save entry</button>
+         <button className="button" onclick="save">Save entry</button>
          </div>
          <div className="container box">
          <p className="subtitle">Past Entries</p>
