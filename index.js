@@ -33,7 +33,7 @@ class App extends Component {
 
   render() {
     return (
-      <div className="container box" style={{ backgroundColor: "white" }}>
+      <div className="container box" style={{ backgroundColor: "white", height: "100vh" }}>
         <div className="title">
           <Hello name={this.state.name} />
         </div>
