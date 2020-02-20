@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import ReactQuill from 'react-quill';
 import './style.css';
 import firebase from 'firebase';
-import { DB_CONFIG } from './config.js';
+import { DB_CONFIG } from './Config';
 
 class App extends Component {
   constructor(props) {
@@ -39,20 +39,10 @@ class App extends Component {
 
 	componentDidMount() {
 		this.database.on('value', snap({
-			var journal = this.database.val();
-			var keys = this.database.Object.keys(journal);
-
-			for (var i = 0; i < keys.length; i++) {
-				var k = keys[i];
-				var title = journal[k].title;
-				var articleBody = journal[k].articleBody;
-				var article = document.createElement("div");
-				article.innerHTML += '<article className="tile is-child box">';
-				article.innerHTML += '<p className="title is-5">'+title+'</p>';
-				article.innerHTML += articleBody;
-				article.innerHTML += '</article>';
-				document.getElementById('tileContainer').appendChild(article);
-		});
+			this.setState({
+				entries: snap.val()
+			});
+		})
 	}
 
   render() {
