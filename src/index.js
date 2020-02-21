@@ -19,7 +19,7 @@ class App extends Component {
 		var title = (date.getMonth()+1)+'/'+date.getDate();
 
     this.state = {
-      name: 'Jordan',
+      name: 'Friend',
       date: today,
       text: '',
       theme: 'snow',
@@ -64,9 +64,10 @@ class App extends Component {
 	handleSubmit(e) {
 		e.preventDefault();
 		const itemsRef = firebase.database().ref('entries');
+		var editedTxt = this.state.text.slice(3, this.state.text.length - 4);
 		const entry = {
 			title: this.state.title,
-			articleBody: this.state.text
+			articleBody: editedTxt
 		}
 		itemsRef.push(entry);
 		this.setState({
@@ -85,7 +86,7 @@ class App extends Component {
 
   render() {
     return (
-      <div className="container box" style={{ backgroundColor: "white", height: "100vh" }}>
+      <div className="container" style={{ backgroundColor: "white", height: "100vh" }}>
         <div className="title">
           <Hello name={this.state.name} />
         </div>
