@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css"" rel="stylesheet" />
+    <link rel="shortcut icon" type="image/icon-x" href="quill_icon.png"/>
+    <link rel="apple-touch-icon" href="quill_icon.png" />
+
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <title>Journal</title>
+  </head>
+  <body>
+    <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
+
+    <div id="root"></div>
+  </body>
+  <script>
+    document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      fetch(`/index.html?_=${Date.now()}`)
+        .then(res => res.text())
+        .then(htmlString => {
+          let doc = new DOMParser().parseFromString(htmlString, "text/html");
+          let latestVersion = doc
+            .querySelector("meta[name='app-version']")
+            .getAttribute("content");
+
+          if (latestVersion !== currentVersion) {
+            window.location.reload(true);
+          }
+        });
+      }
+    });
+  </script>
+</html>
