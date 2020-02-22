@@ -140,7 +140,7 @@ class App extends Component {
 			)
 		};
     return (
-      <div className="container" style={{ backgroundColor: "white", height: "100vh" }}>
+      <div className="container" style={{ backgroundColor: "white", height: "100vh", padding: "10px"}}>
         <div className="title">
           <Hello name={firebase.auth().currentUser.displayName} />
         </div>
@@ -180,6 +180,7 @@ class App extends Component {
           </div>
          </div>
 				 <button className="button is-rounded" onClick={this.signOutCurrentUser}>Sign Out</button>
+				 <br /><br />
        </div>
     );
   }
