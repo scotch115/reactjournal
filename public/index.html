@@ -10,13 +10,58 @@
     <link rel="apple-touch-icon" href="quill_icon.png" />
 
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+		<!--Firebase Instances -->
+		<script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/ui/4.4.0/firebase-ui-auth.js"></script>
+		<link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.4.0/firebase-ui-auth.css" />
+
+
     <title>Journal</title>
   </head>
   <body>
-    <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
-
     <div id="root"></div>
   </body>
+	<script>
+	initApp = function() {
+        firebase.auth().onAuthStateChanged(function(user) {
+          if (user) {
+            // User is signed in.
+            var displayName = user.displayName;
+            var email = user.email;
+            var emailVerified = user.emailVerified;
+            var photoURL = user.photoURL;
+            var uid = user.uid;
+            var phoneNumber = user.phoneNumber;
+            var providerData = user.providerData;
+            user.getIdToken().then(function(accessToken) {
+              document.getElementById('sign-in-status').textContent = 'Signed in';
+              document.getElementById('sign-in').textContent = 'Sign out';
+              document.getElementById('account-details').textContent = JSON.stringify({
+                displayName: displayName,
+                email: email,
+                emailVerified: emailVerified,
+                phoneNumber: phoneNumber,
+                photoURL: photoURL,
+                uid: uid,
+                accessToken: accessToken,
+                providerData: providerData
+              }, null, '  ');
+            });
+          } else {
+            // User is signed out.
+            document.getElementById('sign-in-status').textContent = 'Signed out';
+            document.getElementById('sign-in').textContent = 'Sign in';
+            document.getElementById('account-details').textContent = 'null';
+          }
+        }, function(error) {
+          console.log(error);
+        });
+      };
+
+      window.addEventListener('load', function() {
+        initApp();
+      });
+	</script>
   <script>
     document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible") {

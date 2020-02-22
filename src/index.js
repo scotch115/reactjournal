@@ -6,12 +6,29 @@ import PropTypes from 'prop-types';
 import ReactQuill from 'react-quill';
 import firebase from 'firebase';
 import { DB_CONFIG } from './Config';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+
 
 class App extends Component {
   constructor() {
     super();
-		this.app = firebase.initializeApp(DB_CONFIG);
+		this.app = !firebase.apps.length ? firebase.initializeApp(DB_CONFIG) : firebase.app();
 		this.database = this.app.database().ref().child('entries');
+
+		this.state = {
+			isSignedIn: false
+		}
+
+		const uiConfig = {
+			signInFlow: 'popup',
+			signInOptions: [
+				firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+				firebase.auth.GithubAuthProvider.PROVIDER_ID
+			],
+			callbacks: {
+				signInSuccessfulWithAuthResult: () => false
+			}
+		};
 
 
     var date = new Date();
@@ -24,7 +41,9 @@ class App extends Component {
       text: '',
       theme: 'snow',
 			title: title,
-			entries: []
+			entries: [],
+			isSignedIn: false,
+			uiConfig: uiConfig,
     };
     this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -44,7 +63,16 @@ class App extends Component {
   }
 
 	componentDidMount() {
-		const itemsRef = firebase.database().ref('entries');
+		const itemsRef = firebase.database().ref('entries/');
+		// TODO: Add user-specific database folders based on login
+		// firebase.auth().onAuthStateChanged(function(user){
+		// 	if (user) {
+		// 		itemsRef = firebase.database().ref(`entries/${firebase.auth().currentUser.displayName}`);
+		// 	}
+		// 	else {
+		// 		itemsRef = firebase.database().ref('entries/default');
+		// 	}
+		// });
 		itemsRef.on('value', (snapshot) => {
 			let entries = snapshot.val();
 			let newState = [];
@@ -59,11 +87,20 @@ class App extends Component {
 				entries: newState
 			});
 		});
+		this.unregisterAuthObserver = firebase.auth().onAuthStateChanged(
+			(user) => this.setState({isSignedIn: !!user})
+		);
+	}
+
+	componentWillUnmount() {
+		this.unregisterAuthObserver = firebase.auth().onAuthStateChanged(
+			(user) => this.setState({isSignedIn: !!user})
+		);
 	}
 
 	handleSubmit(e) {
 		e.preventDefault();
-		const itemsRef = firebase.database().ref('entries');
+		const itemsRef = firebase.database().ref('entries/');
 		var editedTxt = this.state.text.slice(3, this.state.text.length - 4);
 		const entry = {
 			title: this.state.title,
@@ -77,6 +114,14 @@ class App extends Component {
 		});
 	}
 
+	signOutCurrentUser(e) {
+		firebase.auth().signOut().then(function() {
+			console.log('User signed out');
+		}, function(error) {
+			console.error('Error signing out', error);
+		});
+	}
+
 	removeItem(itemId) {
 		const itemRef = firebase.database().ref(`/entries/${itemId}`);
 		itemRef.remove();
@@ -85,10 +130,19 @@ class App extends Component {
 
 
   render() {
+		if (!this.state.isSignedIn) {
+			return(
+				<div className="container box">
+					<div className=" title is-4 has-text-centered">React Journal</div>
+					<p className="has-text-centered">Please sign in:</p>
+					<StyledFirebaseAuth uiConfig={this.state.uiConfig} firebaseAuth={firebase.auth()} />
+					</div>
+			)
+		};
     return (
       <div className="container" style={{ backgroundColor: "white", height: "100vh" }}>
         <div className="title">
-          <Hello name={this.state.name} />
+          <Hello name={firebase.auth().currentUser.displayName} />
         </div>
         <div className="subtitle">
           <Today date={this.state.date} />
@@ -125,6 +179,7 @@ class App extends Component {
 						</div>
           </div>
          </div>
+				 <button className="button is-rounded" onClick={this.signOutCurrentUser}>Sign Out</button>
        </div>
     );
   }

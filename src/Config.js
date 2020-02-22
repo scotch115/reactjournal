@@ -1,5 +1,3 @@
-import firebase from 'firebase';
-
 export const DB_CONFIG = {
 	apiKey: "AIzaSyBljVtRAbzvQMdzIskfxb_HSUrs5vKcNBk",
 	authDomain: "react-journal-cf451.firebaseapp.com",
