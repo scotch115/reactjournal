@@ -23,7 +23,8 @@ class App extends Component {
 			signInFlow: 'popup',
 			signInOptions: [
 				firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-				firebase.auth.GithubAuthProvider.PROVIDER_ID
+				firebase.auth.GithubAuthProvider.PROVIDER_ID,
+				firebase.auth.TwitterAuthProvider.PROVIDER_ID
 			],
 			callbacks: {
 				signInSuccessfulWithAuthResult: () => false
