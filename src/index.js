@@ -44,7 +44,7 @@ class App extends Component {
 			title: title,
 			entries: [],
 			isSignedIn: false,
-			uiConfig: uiConfig,
+			uiConfig: uiConfig
     };
     this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -64,14 +64,14 @@ class App extends Component {
   }
 
 	componentDidMount() {
-			const itemsRef = firebase.database().ref(`entries/${firebase.auth().currentUser.displayName}`);
+			var itemsRef = firebase.database().ref(`entries/${firebase.auth().currentUser.displayName}`);
 		// TODO: Add user-specific database folders based on login
 		 firebase.auth().onAuthStateChanged(function(user){
 		 //	if (user) {
-		 //	   const itemsRef = firebase.database().ref(`entries/${firebase.auth().currentUser.displayName}`);
+		 //	   itemsRef = firebase.database().ref(`entries/${firebase.auth().currentUser.displayName}`);
 		 //	}
 		 // 	else {
-		 //	   const itemsRef = firebase.database().ref('entries/');
+		 //	   itemsRef = firebase.database().ref('entries/');
 		 //	}
 		// });
 		itemsRef.on('value', (snapshot) => {
