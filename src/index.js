@@ -13,8 +13,8 @@ class App extends Component {
   constructor() {
     super();
 		this.app = !firebase.apps.length ? firebase.initializeApp(DB_CONFIG) : firebase.app();
-		this.database = this.app.database().ref().child('entries/');
-		// this.database = this.app.database().ref(`entries/${firebase.auth().currentUser.displayName}/`);
+		// this.database = this.app.database().ref().child('entries/');
+		this.database = this.app.database().ref(`entries/${firebase.auth().currentUser.displayName}`);
 
 		this.state = {
 			isSignedIn: false
@@ -65,16 +65,17 @@ class App extends Component {
   }
 
 	componentDidMount() {
-		  var itemsRef = firebase.database().ref('entries/');
+		  var dbRef = firebase.database().ref('entries/');
 		  // TODO: Add user-specific database folders based on login
-		  firebase.auth().onAuthStateChanged(function(user){
-		 	if (user) {
-		 		itemsRef = firebase.database().ref(`entries/${firebase.auth().currentUser.displayName}`);
-		 	}
-		  	else {
-		 		itemsRef = firebase.database().ref('entries/');
-		 	}
-		 });
+		  // firebase.auth().onAuthStateChanged(function(user){
+		  //	if (user) {
+		  //	itemsRef = firebase.database().ref(`entries/${firebase.auth().currentUser.displayName}`);
+		  // }
+		  //	else {
+		  //	itemsRef = firebase.database().ref('entries/');
+		  // }
+		  //});
+		  var itemsRef = dbRef.child(`${firebase.auth().currentUser.displayName}`);
 		itemsRef.on('value', (snapshot) => {
 			let entries = snapshot.val();
 			let newState = [];
