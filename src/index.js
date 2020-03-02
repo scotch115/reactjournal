@@ -64,7 +64,7 @@ class App extends Component {
   }
 
 	componentDidMount() {
-			var itemsRef = firebase.database().ref(`entries/${firebase.auth().currentUser.displayName}`);
+			var itemsRef = firebase.database().ref('entries/');
 		// TODO: Add user-specific database folders based on login
 		 // firebase.auth().onAuthStateChanged(function(user){
 		 //	if (user) {
@@ -101,7 +101,7 @@ class App extends Component {
 
 	handleSubmit(e) {
 		e.preventDefault();
-		const itemsRef = firebase.database().ref(`entries/${firebase.auth().currentUser.displayName}`);
+		const itemsRef = firebase.database().ref('entries/');
 		var editedTxt = this.state.text.slice(3, this.state.text.length - 4);
 		const entry = {
 			title: this.state.title,
@@ -124,7 +124,7 @@ class App extends Component {
 	}
 
 	removeItem(itemId) {
-		const itemRef = firebase.database().ref(`/entries/${firebase.auth().currentUser.displayName}/${itemId}`);
+		const itemRef = firebase.database().ref('/entries');
 		itemRef.remove();
 	}
 
