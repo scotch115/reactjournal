@@ -64,16 +64,16 @@ class App extends Component {
   }
 
 	componentDidMount() {
-		var itemsRef = firebase.database().ref('entries/');
-		// TODO: Add user-specific database folders based on login
-		 // firebase.auth().onAuthStateChanged(function(user){
-		 //	if (user) {
-		 //	   itemsRef = firebase.database().ref(`entries/${firebase.auth().currentUser.displayName}`);
-		 //	}
-		 // 	else {
-		 //	   itemsRef = firebase.database().ref('entries/');
-		 //	}
-		// });
+		  var itemsRef = firebase.database().ref('entries/');
+		  // TODO: Add user-specific database folders based on login
+		  firebase.auth().onAuthStateChanged(function(user){
+		 	if (user) {
+		 		itemsRef = firebase.database().ref(`entries/${firebase.auth().currentUser.displayName}`);
+		 	}
+		  	else {
+		 		itemsRef = firebase.database().ref('entries/');
+		 	}
+		 });
 		itemsRef.on('value', (snapshot) => {
 			let entries = snapshot.val();
 			let newState = [];
@@ -124,7 +124,7 @@ class App extends Component {
 	}
 
 	removeItem(itemId) {
-		const itemRef = firebase.database().ref('/entries');
+		const itemRef = firebase.database().ref(`entries/${firebase.auth().currentUser.displayName}`);
 		itemRef.remove();
 	}
 
