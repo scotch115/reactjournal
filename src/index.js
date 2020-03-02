@@ -75,7 +75,7 @@ class App extends Component {
 		  //	itemsRef = firebase.database().ref('entries/');
 		  // }
 		  //});
-		  var itemsRef = dbRef.child(`${firebase.auth().currentUser.displayName}`);
+		  var itemsRef = dbRef.child(`${firebase.auth().currentUser.displayName}/`);
 		itemsRef.on('value', (snapshot) => {
 			let entries = snapshot.val();
 			let newState = [];
