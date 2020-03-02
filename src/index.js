@@ -13,8 +13,8 @@ class App extends Component {
   constructor() {
     super();
 		this.app = !firebase.apps.length ? firebase.initializeApp(DB_CONFIG) : firebase.app();
-		// this.database = this.app.database().ref().child('entries/');
-		this.database = this.app.database().ref(`entries/${firebase.auth().currentUser.displayName}`);
+		this.database = this.app.database().ref().child('entries/');
+		// this.database = this.app.database().ref(`entries/${firebase.auth().currentUser.displayName}/`);
 
 		this.state = {
 			isSignedIn: false
