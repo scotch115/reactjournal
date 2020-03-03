@@ -65,8 +65,8 @@ class App extends Component {
   }
 
 	componentDidMount() {
-		  var userId = firebase.auth().currentUser.displayName;
-		  var itemsRef = firebase.database().ref(`entries/${userId}/`);
+		  // var userId = firebase.auth().currentUser.displayName;
+		  var itemsRef = firebase.database().ref(`entries/`);
 		  // TODO: Add user-specific database folders based on login
 		  //	itemsRef = firebase.database().ref(`entries/${firebase.auth().currentUser.displayName}`);
 		itemsRef.on('value', (snapshot) => {
@@ -96,8 +96,8 @@ class App extends Component {
 
 	handleSubmit(e) {
 		e.preventDefault();
-		var userId = firebase.auth().currentUser.displayName;
-		const itemsRef = firebase.database().ref(`entries/${userId}`);
+		// var userId = firebase.auth().currentUser.displayName;
+		const itemsRef = firebase.database().ref(`entries/`);
 		var editedTxt = this.state.text.slice(3, this.state.text.length - 4);
 		const entry = {
 			title: this.state.title,
@@ -120,8 +120,8 @@ class App extends Component {
 	}
 
 	removeItem(itemId) {
-		var userId = firebase.auth().currentUser.displayName;
-		const itemRef = firebase.database().ref(`entries/${userId}/`);
+		// var userId = firebase.auth().currentUser.displayName;
+		const itemRef = firebase.database().ref(`entries/`);
 		itemRef.remove();
 	}
 
