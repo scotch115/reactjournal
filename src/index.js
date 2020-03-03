@@ -65,17 +65,10 @@ class App extends Component {
   }
 
 	componentDidMount() {
-		  var dbRef = firebase.database().ref('entries/');
+		  var userId = firebase.auth().currentUser.displayName;
+		  var itemsRef = firebase.database().ref(`entries/${userId}/`);
 		  // TODO: Add user-specific database folders based on login
-		  // firebase.auth().onAuthStateChanged(function(user){
-		  //	if (user) {
 		  //	itemsRef = firebase.database().ref(`entries/${firebase.auth().currentUser.displayName}`);
-		  // }
-		  //	else {
-		  //	itemsRef = firebase.database().ref('entries/');
-		  // }
-		  //});
-		  var itemsRef = dbRef.child(`${firebase.auth().currentUser.displayName}/`);
 		itemsRef.on('value', (snapshot) => {
 			let entries = snapshot.val();
 			let newState = [];
