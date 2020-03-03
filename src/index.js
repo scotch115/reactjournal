@@ -14,7 +14,7 @@ class App extends Component {
     super();
 		this.app = !firebase.apps.length ? firebase.initializeApp(DB_CONFIG) : firebase.app();
 		// this.database = this.app.database().ref().child('entries/');
-		this.database = this.app.database().ref(`entries/${firebase.auth().currentUser.displayName}`);
+		this.database = this.app.database().ref('entries/');
 
 		this.state = {
 			isSignedIn: false
@@ -96,7 +96,8 @@ class App extends Component {
 
 	handleSubmit(e) {
 		e.preventDefault();
-		const itemsRef = firebase.database().ref(`entries/${firebase.auth().currentUser.displayName}`);
+		var userId = firebase.auth().currentUser.displayName;
+		const itemsRef = firebase.database().ref(`entries/${userId}`);
 		var editedTxt = this.state.text.slice(3, this.state.text.length - 4);
 		const entry = {
 			title: this.state.title,
@@ -119,7 +120,8 @@ class App extends Component {
 	}
 
 	removeItem(itemId) {
-		const itemRef = firebase.database().ref(`entries/${firebase.auth().currentUser.displayName}/`);
+		var userId = firebase.auth().currentUser.displayName;
+		const itemRef = firebase.database().ref(`entries/${userId}/`);
 		itemRef.remove();
 	}
 
