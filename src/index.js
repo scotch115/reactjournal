@@ -13,8 +13,8 @@ class App extends Component {
   constructor() {
     super();
 		this.app = !firebase.apps.length ? firebase.initializeApp(DB_CONFIG) : firebase.app();
-		// this.database = this.app.database().ref().child('entries/');
-		this.database = this.app.database().ref('entries/');
+		this.database = this.app.database().ref().child('entries/');
+		// this.database = this.app.database().ref('entries/');
 
 		this.state = {
 			isSignedIn: false
@@ -106,8 +106,7 @@ class App extends Component {
 		}
 		itemsRef.push(entry);
 		this.setState({
-			title: '',
-			articleBody: '',
+			articleBody: ''
 			text: ''
 		});
 	}
