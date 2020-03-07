@@ -49,6 +49,7 @@ class App extends Component {
     };
     this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
+		this.removeTags = this.removeTags.bind(this);
   }
 
   handleChange (value) {
@@ -117,11 +118,22 @@ class App extends Component {
 		);
 	}
 
+	removeTags(str) {
+      if ((str===null) || (str===''))
+			{
+      	return false;
+      } else {
+      str = str.toString();
+      return str.replace( /(<([^>]+)>)/ig, '\n');
+		}
+   }
+
 	handleSubmit(e) {
 		e.preventDefault();
 		// var userId = firebase.auth().currentUser.displayName;
 		const itemsRef = firebase.database().ref(`entries/${this.app.auth().currentUser.displayName}`);
-		var editedTxt = this.state.text.slice(3, this.state.text.length - 4);
+		// var editedTxt = this.state.text.slice(3, this.state.text.length - 4);
+		var editedTxt = this.removeTags(this.state.text);
 		const entry = {
 			title: this.state.title,
 			articleBody: editedTxt
@@ -188,10 +200,10 @@ class App extends Component {
             <div className="tile is-vertical is-parent" id="tileContainer">
 						{this.state.entries.map((entry) => {
 							return (
-								<div className="tile box is-child notification is-white">
+								<div className="tile box is-child notification is-white" style={{whiteSpace: "pre-line"}}>
 								<button className="delete" onClick={() => this.removeItem(entry.id)}></button>
 									<p className="title is-5">{entry.title}</p>
-									<div className="has-text-centered" style={{padding: "10px"}}></div>
+									<div className="has-text-centered"></div>
 									{entry.articleBody}
 								</div>
 							)
