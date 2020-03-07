@@ -70,7 +70,7 @@ class App extends Component {
 			firebase.auth().onAuthStateChanged(function(user) {
 					console.log("Current user logged in is "+user.displayName);
 					if (user) {
-						itemsRef = firebase.database().ref(`entries/${firebase.auth().currentUser.displayName}/`)
+						itemsRef = firebase.database().ref(`entries/${firebase.auth().currentUser.uid}/`)
 						console.log("Inside if statement: "+itemsRef);
 						itemsRef.on('value', (snapshot) => {
 						let entries = snapshot.val();
@@ -131,7 +131,7 @@ class App extends Component {
 	handleSubmit(e) {
 		e.preventDefault();
 		// var userId = firebase.auth().currentUser.displayName;
-		const itemsRef = firebase.database().ref(`entries/${this.app.auth().currentUser.displayName}`);
+		const itemsRef = firebase.database().ref(`entries/${this.app.auth().currentUser.uid}`);
 		// var editedTxt = this.state.text.slice(3, this.state.text.length - 4);
 		var editedTxt = this.removeTags(this.state.text);
 		const entry = {
@@ -155,7 +155,7 @@ class App extends Component {
 
 	removeItem(itemId) {
 		// var userId = firebase.auth().currentUser.displayName;
-		const itemRef = firebase.database().ref(`entries/${this.app.auth().currentUser.displayName}/${itemId}`);
+		const itemRef = firebase.database().ref(`entries/${this.app.auth().currentUser.uid}/${itemId}`);
 		itemRef.remove();
 	}
 
