@@ -1,4 +1,5 @@
 # reactjournal
+[![Build Status](https://travis-ci.com/scotch115/reactjournal.svg?branch=master)](https://travis-ci.com/scotch115/reactjournal)
 
 This web app was designed as a way to showcase how a website could have a simple database with multiple user accouns, and how the data would be compartmentalized for each user.
 
