@@ -65,25 +65,47 @@ class App extends Component {
   }
 
 	componentDidMount() {
-		   var userId = firebase.auth().currentUser.displayName;
-		  // var itemsRef = firebase.database().ref(`entries/`);
-		  // TODO: Add user-specific database folders based on login
-		  //	itemsRef = firebase.database().ref(`entries/${firebase.auth().currentUser.displayName}`);
-		  const itemsRef = firebase.database().ref(`entries/${userId}/`);
-		itemsRef.on('value', (snapshot) => {
-			let entries = snapshot.val();
-			let newState = [];
-			for (let entry in entries) {
-				newState.push({
-					id: entry,
-					title: entries[entry].title,
-					articleBody: entries[entry].articleBody
-				});
-			}
-			this.setState({
-				entries: newState
-			});
-		});
+			var itemsRef = firebase.database().ref('entries/');
+			firebase.auth().onAuthStateChanged(function(user) {
+					console.log("Current user logged in is "+user.displayName);
+					if (user) {
+						itemsRef = firebase.database().ref(`entries/${firebase.auth().currentUser.displayName}/`)
+						console.log("Inside if statement: "+itemsRef);
+						itemsRef.on('value', (snapshot) => {
+						let entries = snapshot.val();
+						let newState = [];
+						for (let entry in entries) {
+							newState.push({
+								id: entry,
+								title: entries[entry].title,
+								articleBody: entries[entry].articleBody
+							});
+						}
+						this.setState({
+							entries: newState
+						});
+					});
+					} else {
+						itemsRef = firebase.database().ref('entries/')
+						console.log("Inside else statement: "+itemsRef);
+						itemsRef.on('value', (snapshot) => {
+						let entries = snapshot.val();
+						let newState = [];
+						for (let entry in entries) {
+							newState.push({
+								id: entry,
+								title: entries[entry].title,
+								articleBody: entries[entry].articleBody
+							});
+						}
+						this.setState({
+							entries: newState
+						});
+					});
+					}
+				}.bind(this));
+				console.log("itemsRef once conditional statement has been executed "+itemsRef);
+
 		this.unregisterAuthObserver = firebase.auth().onAuthStateChanged(
 			(user) => this.setState({isSignedIn: !!user})
 		);
@@ -97,8 +119,8 @@ class App extends Component {
 
 	handleSubmit(e) {
 		e.preventDefault();
-		var userId = firebase.auth().currentUser.displayName;
-		const itemsRef = firebase.database().ref(`entries/${userId}`);
+		// var userId = firebase.auth().currentUser.displayName;
+		const itemsRef = firebase.database().ref(`entries/${this.app.auth().currentUser.displayName}`);
 		var editedTxt = this.state.text.slice(3, this.state.text.length - 4);
 		const entry = {
 			title: this.state.title,
@@ -106,7 +128,7 @@ class App extends Component {
 		}
 		itemsRef.push(entry);
 		this.setState({
-			articleBody: ''
+			articleBody: '',
 			text: ''
 		});
 	}
@@ -120,8 +142,8 @@ class App extends Component {
 	}
 
 	removeItem(itemId) {
-		var userId = firebase.auth().currentUser.displayName;
-		const itemRef = firebase.database().ref(`entries/${userId}/${itemId}`);
+		// var userId = firebase.auth().currentUser.displayName;
+		const itemRef = firebase.database().ref(`entries/${this.app.auth().currentUser.displayName}/${itemId}`);
 		itemRef.remove();
 	}
 
