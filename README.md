@@ -8,44 +8,44 @@ In this case, evey user is assigned a User Id (UID) by Firebase Authentication, 
 ```
 // When a user logs in:
 firebase.auth().onAuthStateChanged(function(user) {
-					// Load user-specific data
-					if (user) {
-						// Switch database directory reference
-						itemsRef = firebase.database().ref(`entries/${firebase.auth().currentUser.uid}/`)
-						// Take snapshot and load data into current state
-						itemsRef.on('value', (snapshot) => {
-						let entries = snapshot.val();
-						let newState = [];
-						for (let entry in entries) {
-							newState.push({
-								id: entry,
-								title: entries[entry].title,
-								articleBody: entries[entry].articleBody
-							});
-						}
-						this.setState({
-							entries: newState
-						});
-					});
-					} else {
-						// If no user is logged in, load database nodes (impossible to reach this due to FirebaseAuthUI Flow, if user is not logged in, will be redirected to login screen)
-						itemsRef = firebase.database().ref('entries/')
-						itemsRef.on('value', (snapshot) => {
-						let entries = snapshot.val();
-						let newState = [];
-						for (let entry in entries) {
-							newState.push({
-								id: entry,
-								title: entries[entry].title,
-								articleBody: entries[entry].articleBody
-							});
-						}
-						this.setState({
-							entries: newState
-						});
-					});
-					}
-				}
+	// Load user-specific data
+	if (user) {
+	// Switch database directory reference
+	itemsRef = firebase.database().ref(`entries/${firebase.auth().currentUser.uid}/`)
+	// Take snapshot and load data into current state
+	itemsRef.on('value', (snapshot) => {
+	let entries = snapshot.val();
+	let newState = [];
+	for (let entry in entries) {
+		newState.push({
+			id: entry,
+			title: entries[entry].title,
+			articleBody: entries[entry].articleBody
+			});
+		}
+		this.setState({
+			entries: newState
+		});
+	 });
+	} else {
+	// If no user is logged in, load database nodes (impossible to reach this due to FirebaseAuthUI Flow, if user is not logged in, will be redirected to login screen)
+	itemsRef = firebase.database().ref('entries/')
+	itemsRef.on('value', (snapshot) => {
+		let entries = snapshot.val();
+		let newState = [];
+		for (let entry in entries) {
+			newState.push({
+			id: entry,
+			title: entries[entry].title,
+			articleBody: entries[entry].articleBody
+			});
+		}
+		this.setState({
+			entries: newState
+		});
+	  });
+	}
+}
 ```
 
 ReactJournal uses the Quill.js package, specifically the react-quill module, as the main editor.
