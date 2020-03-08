@@ -164,7 +164,7 @@ class App extends Component {
   render() {
 		if (!this.state.isSignedIn) {
 			return(
-				<div className="container box">
+				<div className="container box" style={{position: "relative", top: "20vh"}}>
 					<div className=" title is-4 has-text-centered">React Journal</div>
 					<p className="has-text-centered">Please sign in:</p>
 					<StyledFirebaseAuth uiConfig={this.state.uiConfig} firebaseAuth={firebase.auth()} />
