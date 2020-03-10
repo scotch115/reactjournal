@@ -170,13 +170,7 @@ class App extends Component {
 					</div>
 			)
 		};
-              var iOS = (navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false);
-               var this.isWKWebView = false;
-               if (window.webkit && window.webkit.messageHandlers) {
-                 this.isWKWebView= true;
-                 window.stop();
-                }
-        
+              
     return (
       <div className="container" style={{ backgroundColor: "white", height: "100vh", padding: "10px"}}>
         <div className="title">
