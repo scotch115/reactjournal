@@ -171,9 +171,9 @@ class App extends Component {
 			)
 		};
               var iOS = (navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false);
-               var this.setState({isWKWebView: false});
+               var this.isWKWebView = false;
                if (window.webkit && window.webkit.messageHandlers) {
-                 this.setState({isWKWebView: true});
+                 this.isWKWebView= true;
                  window.stop();
                 }
         
