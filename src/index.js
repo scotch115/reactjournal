@@ -43,8 +43,7 @@ class App extends Component {
 			title: title,
 			entries: [],
 			isSignedIn: false,
-			uiConfig: uiConfig,
-      isWKWebView: false
+			uiConfig: uiConfig
     };
     this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -170,7 +169,6 @@ class App extends Component {
 					</div>
 			)
 		};
-              
     return (
       <div className="container" style={{ backgroundColor: "white", height: "100vh", padding: "10px"}}>
         <div className="title">
