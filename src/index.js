@@ -168,7 +168,7 @@ class App extends Component {
 					<StyledFirebaseAuth uiConfig={this.state.uiConfig} firebaseAuth={firebase.auth()} />
 					</div>
 			)
-		};
+		}
     return (
       <div className="container" style={{ backgroundColor: "white", height: "100vh", padding: "10px"}}>
         <div className="title">
