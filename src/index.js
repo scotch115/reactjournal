@@ -7,11 +7,12 @@ import ReactQuill from 'react-quill';
 import firebase from 'firebase';
 import { DB_CONFIG } from './Config';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import ls from 'local-storage';
 
 
 class App extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 		this.app = !firebase.apps.length ? firebase.initializeApp(DB_CONFIG) : firebase.app();
 		this.database = this.app.database().ref().child('entries/');
 		// this.database = this.app.database().ref('entries/');
@@ -43,11 +44,17 @@ class App extends Component {
 			title: title,
 			entries: [],
 			isSignedIn: false,
-			uiConfig: uiConfig
+			uiConfig: uiConfig,
+			background: ls.get('background'),
+			containerBackground: ls.get('containerBackground'),
+			entriesBackground: ls.get('entriesBackground'),
+			textColor: ls.get('textColor'),
+			bulmaImage: ls.get('bulmaImage')
     };
     this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.removeTags = this.removeTags.bind(this);
+		this.changeTheme = this.changeTheme.bind(this);
   }
 
   handleChange (value) {
@@ -108,6 +115,15 @@ class App extends Component {
 		this.unregisterAuthObserver = firebase.auth().onAuthStateChanged(
 			(user) => this.setState({isSignedIn: !!user})
 		);
+		fetch(URL)
+		.then(response => response.json())
+		.then(json => this.setState({
+			background: ls.get('background'),
+			containerBackground: ls.get('containerBackground'),
+			entriesBackground: ls.get('entriesBackground'),
+			textColor: ls.get('textColor'),
+			bulmaImage: ls.get('bulmaImage')
+		}));
 	}
 
 	componentWillUnmount() {
@@ -157,9 +173,71 @@ class App extends Component {
 		itemRef.remove();
 	}
 
-
+	changeTheme = () => {
+		if (this.state.background === 'white') {
+			this.setState({
+				background: "#303a52",
+				textColor: 'white',
+				containerBackground: "#574b90",
+				entriesBackground: "#9e579d",
+				bulmaImage: "https://bulma.io/images/made-with-bulma--white.png"
+			})
+			ls.set('background', "#303a52");
+			ls.set('textColor', 'white');
+			ls.set('containerBackground', "#574b90");
+			ls.set('entriesBackground', "#9e579d");
+			ls.set('bulmaImage', "https://bulma.io/images/made-with-bulma--white.png");
+		} else if (this.state.background === '#303a52') {
+			this.setState({
+				background: "#6e3b3b",
+				textColor: 'white',
+				containerBackground: "#ac3f21",
+				entriesBackground: "#be6a15",
+				bulmaImage: "https://bulma.io/images/made-with-bulma--white.png"
+			})
+			ls.set('background', "#6e3b3b");
+			ls.set('textColor', 'white');
+			ls.set('containerBackground', "#ac3f21");
+			ls.set('entriesBackground', "#be6a15");
+			ls.set('bulmaImage', "https://bulma.io/images/made-with-bulma--white.png");
+		} else if (this.state.background === '#6e3b3b') {
+			this.setState({
+				background: '#071e3d',
+				textColor: 'white',
+				containerBackground: '#1f4287',
+				entriesBackground: '#278ea5',
+				bulmaImage: "https://bulma.io/images/made-with-bulma--white.png"
+			})
+			ls.set('background', "#071e3d");
+			ls.set('textColor', 'white');
+			ls.set('containerBackground', "#1f4287");
+			ls.set('entriesBackground', "#278ea5");
+			ls.set('bulmaImage', "https://bulma.io/images/made-with-bulma--white.png");
+		} else if (this.state.background === '#071e3d')
+		{
+			this.setState({
+				background: 'white',
+				textColor: 'black',
+				containerBackground: 'white',
+				entriesBackground: 'white',
+				bulmaImage: "https://bulma.io/images/made-with-bulma--black.png"
+			})
+			ls.set('background', 'white');
+			ls.set('textColor', 'black');
+			ls.set('containerBackground', 'white');
+			ls.set('entriesBackground', 'white');
+			ls.set('bulmaImage', "https://bulma.io/images/made-with-bulma--black.png");
+		}
+	}
 
   render() {
+		if (typeof document != 'undefined'){
+			console.log("User is using web browser!");
+		} else if (typeof navigator != 'undefined' && navigator.product === 'ReactNative') {
+			console.log("User is using ReactNative!");
+		} else {
+			console.log("I'm in NodeJS??");
+		}
 		if (!this.state.isSignedIn) {
 			return(
 				<div className="container box" style={{position: "relative", top: "20vh"}}>
@@ -170,15 +248,15 @@ class App extends Component {
 			)
 		}
     return (
-      <div className="container" style={{ backgroundColor: "white", height: "100vh", padding: "10px"}}>
-        <div className="title">
+      <div style={{ backgroundColor: this.state.background, color: this.state.textColor, height: "100%", width: "100vw", padding: "10px"}}>
+        <div className="title" style={{color: this.state.textColor}}>
           <Hello name={firebase.auth().currentUser.displayName} />
         </div>
-        <div className="subtitle">
+        <div className="subtitle" style={{color: this.state.textColor}}>
           <Today date={this.state.date} />
         </div>
-        <div>
-          <p>Begin your day here:</p>
+        <div style={{color: 'black'}}>
+          <p style={{color: this.state.textColor}}>Begin your day here:</p>
           <ReactQuill
             theme={this.state.theme}
             onChange={this.handleChange}
@@ -187,18 +265,20 @@ class App extends Component {
             formats={App.formats}
             bounds={'.app'}
             placeholder={this.props.placeholder}
+						style={{backgroundColor: 'white'}}
           />
          <br />
          <button className="button" type="submit" onClick={this.handleSubmit}>Save entry</button>
+				 <button className="button is-info" style={{marginLeft: 10}} type="submit" onClick={this.changeTheme}>Change Theme</button>
          </div>
          <br />
-         <div className="container box" style={{backgroundColor: "white"}}>
-         <p className="title is-4">Past Entries</p>
+         <div className="container box" style={{backgroundColor: this.state.containerBackground, color: this.state.textColor}}>
+         <p className="title is-4" style={{color: this.state.textColor}}>Past Entries</p>
           <div className="tile is-ancestor">
             <div className="tile is-vertical is-parent" id="tileContainer">
 						{this.state.entries.map((entry) => {
 							return (
-								<div className="tile box is-child notification is-white" style={{whiteSpace: "pre-line"}}>
+								<div className="tile box is-child notification" style={{whiteSpace: "pre-line", backgroundColor: this.state.entriesBackground, color: this.state.textColor}}>
 								<button className="delete" onClick={() => this.removeItem(entry.id)}></button>
 									<p className="title is-5">{entry.title}</p>
 									<div className="has-text-centered"></div>
@@ -211,12 +291,12 @@ class App extends Component {
          </div>
 				 <button className="button is-rounded" onClick={this.signOutCurrentUser}>Sign Out</button>
 				 <br /><br />
-				 <footer className="hero-foot">
+				 <footer className="hero-foot" style={{backgroundColor: this.state.background}}>
 			    <div className="content has-text-centered">
 			     Made with <i className="fa fa-heart" style={{color: "rgb(235, 43, 86)"}}></i> & <i className="fa fa-coffee" style={{color: "rgb(44, 31, 22)"}}></i> in Orlando
 			    <div className=" content has-text-centered">
 			      <a href="https://bulma.io">
-			      <img src="https://bulma.io/images/made-with-bulma--black.png" alt="Made with Bulma" width="128" height="24" />
+			      <img src={this.state.bulmaImage} alt="Made with Bulma" width="128" height="24" />
 			      </a>
 			    </div>
 					</div>
@@ -256,7 +336,7 @@ App.formats = [
  * PropType validation
  */
 App.propTypes = {
-  placeholder: PropTypes.string,
+  placeholder: PropTypes.string
 }
 
 render(<App placeholder="Start here!"/>, document.getElementById('root'));
