@@ -48,7 +48,7 @@ class App extends Component {
 			background: ls.get('background') || 'white',
 			containerBackground: ls.get('containerBackground') || 'white',
 			entriesBackground: ls.get('entriesBackground') || 'white',
-			textColor: ls.get('textColor') || 'white',
+			textColor: ls.get('textColor') || 'black',
 			bulmaImage: ls.get('bulmaImage') || "https://bulma.io/images/made-with-bulma--black.png"
     };
     this.handleChange = this.handleChange.bind(this);
