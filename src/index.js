@@ -45,11 +45,11 @@ class App extends Component {
 			entries: [],
 			isSignedIn: false,
 			uiConfig: uiConfig,
-			background: ls.get('background'),
-			containerBackground: ls.get('containerBackground'),
-			entriesBackground: ls.get('entriesBackground'),
-			textColor: ls.get('textColor'),
-			bulmaImage: ls.get('bulmaImage')
+			background: ls.get('background') || 'white',
+			containerBackground: ls.get('containerBackground') || 'white',
+			entriesBackground: ls.get('entriesBackground') || 'white',
+			textColor: ls.get('textColor') || 'white',
+			bulmaImage: ls.get('bulmaImage') || "https://bulma.io/images/made-with-bulma--black.png"
     };
     this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
