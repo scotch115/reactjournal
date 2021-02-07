@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import App from './Login';
+import New from './New';
 import { Route, BrowserRouter, Switch } from 'react-router-dom';
 
 const routing = (
@@ -8,7 +9,7 @@ const routing = (
     <div>
       <Switch>
         <Route exact path="/" component={App}/> 
-        {/* <Route path="/menu" component={New} /> */}
+        <Route path="/new-entry" component={New} />
       </Switch>
     </div>
   </BrowserRouter>

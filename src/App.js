@@ -1,75 +1,27 @@
 import React, { Component } from 'react';
-import { render } from 'react-dom';
 import Hello from './Hello';
 import Today from './Date';
-import PropTypes from 'prop-types';
-import ReactQuill from 'react-quill';
 import firebase from 'firebase';
-import { DB_CONFIG } from './Config';
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import ReactRoundedImage from 'react-rounded-image';
 
 
 class App extends Component {
   constructor() {
     super();
-		this.app = !firebase.apps.length ? firebase.initializeApp(DB_CONFIG) : firebase.app();
-		// this.database = this.app.database().ref().child('entries/');
-		this.database = this.app.database().ref('entries/');
-
-		this.state = {
-			isSignedIn: false
-		}
-
-
-		const uiConfig = {
-			signInFlow: 'popup',
-			signInOptions: [
-				firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-				firebase.auth.GithubAuthProvider.PROVIDER_ID,
-				firebase.auth.TwitterAuthProvider.PROVIDER_ID
-			],
-			callbacks: {
-				signInSuccessfulWithAuthResult: () => false
-			}
-		};
-
-
     var date = new Date();
     var today = (date.getMonth()+1)+'/'+date.getDate()+'/'+date.getFullYear();
-		var title = (date.getMonth()+1)+'/'+date.getDate();
 
     this.state = {
       name: 'Friend',
       date: today,
-      text: '',
-      theme: 'snow',
-			title: title,
-			entries: [],
-			isSignedIn: false,
-			uiConfig: uiConfig
+      entries: [],
+      isSignedIn: false,
     };
-    this.handleChange = this.handleChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleChange (value) {
-    this.setState({
-			text: value
-		});
-  }
-
-  handleThemeChange (newTheme) {
-    if (newTheme === "core") {
-      newTheme = null;
-      this.setState({ theme: newTheme });
-    }
   }
 
 	componentDidMount() {
-		  // var userId = firebase.auth().currentUser.displayName;
-		  var itemsRef = firebase.database().ref(`entries/`);
-		  // TODO: Add user-specific database folders based on login
-		  //	itemsRef = firebase.database().ref(`entries/${firebase.auth().currentUser.displayName}`);
+          // TODO: Add user-specific database folders based on login
+        var itemsRef = firebase.database().ref(`entries/${firebase.auth().currentUser.uid}`);
 		itemsRef.on('value', (snapshot) => {
 			let entries = snapshot.val();
 			let newState = [];
@@ -84,33 +36,8 @@ class App extends Component {
 				entries: newState
 			});
 		});
-		this.unregisterAuthObserver = firebase.auth().onAuthStateChanged(
-			(user) => this.setState({isSignedIn: !!user})
-		);
 	}
 
-	componentWillUnmount() {
-		this.unregisterAuthObserver = firebase.auth().onAuthStateChanged(
-			(user) => this.setState({isSignedIn: !!user})
-		);
-	}
-
-	handleSubmit(e) {
-		e.preventDefault();
-		// var userId = firebase.auth().currentUser.displayName;
-		const itemsRef = firebase.database().ref(`entries/`);
-		var editedTxt = this.state.text.slice(3, this.state.text.length - 4);
-		const entry = {
-			title: this.state.title,
-			articleBody: editedTxt
-		}
-		itemsRef.push(entry);
-		this.setState({
-			title: '',
-			articleBody: '',
-			text: ''
-		});
-	}
 
 	signOutCurrentUser(e) {
 		firebase.auth().signOut().then(function() {
@@ -122,32 +49,29 @@ class App extends Component {
 
 	removeItem(itemId) {
 		// var userId = firebase.auth().currentUser.displayName;
-		const itemRef = firebase.database().ref(`entries/`);
+		const itemRef = firebase.database().ref(`entries/${firebase.auth().currentUser.uid}/${itemId}`);
 		itemRef.remove();
 	}
 
 
 
   render() {
-		if (!this.state.isSignedIn) {
-			return(
-				<div className="container box">
-					<div className=" title is-4 has-text-centered">React Journal</div>
-					<p className="has-text-centered">Please sign in:</p>
-					<StyledFirebaseAuth uiConfig={this.state.uiConfig} firebaseAuth={firebase.auth()} />
-					</div>
-			)
-		};
-	var userName = firebase.auth().currentUser.displayName;
+    // If user is logged in, create local variables 
+    var userName = firebase.auth().currentUser.displayName;
+    var user = firebase.auth().currentUser;
+
     return (
-      <div className="container" style={{ backgroundColor: "white", height: "100vh", padding: "10px"}}>
-        <div className="title">
-          <Hello name={userName} />
+      <div style={{ backgroundColor: "white", height: "100vh", padding: '10px'}}>
+        <div style={{padding: '2px'}}>
+            <div className="title" style={{fontSize: '3vh'}}>
+            <Hello name={userName} />
+            </div>
+            <div className="subtitle" style={{fontSize: '2vh'}}>
+            <Today date={this.state.date} />
+            </div>
+			<div style={{position: 'absolute', right: '5vmin', top: '2vmin'}}><ReactRoundedImage image={user.photoURL} roundedSize="0" imageWidth="80" imageHeight="80" roundedSize='5'/></div>
+            <div className="button" type="submit" style={{marginBottom: '10px'}}><a href="/new-entry" style={{textDecoration: 'none', color: 'black'}}>New entry</a></div>
         </div>
-        <div className="subtitle">
-          <Today date={this.state.date} />
-        </div>
-        <div className="button" type="submit" ><a href="/new-entry" style={{textDecoration: 'none', color: 'black'}}>New entry</a></div>
          <div className="container box" style={{backgroundColor: "white"}}>
          <p className="title is-4">Past Entries</p>
           <div className="tile is-ancestor">
@@ -165,18 +89,23 @@ class App extends Component {
 						</div>
           </div>
          </div>
-				 <button className="button is-rounded" onClick={this.signOutCurrentUser}>Sign Out</button>
-				 <br /><br />
-				 <footer className="hero-foot">
-			    <div className="content has-text-centered">
-			     Made with <i className="fa fa-heart" style={{color: "rgb(235, 43, 86)"}}></i> & <i className="fa fa-coffee" style={{color: "rgb(44, 31, 22)"}}></i> in Orlando
-			    <div className=" content has-text-centered">
-			      <a href="https://bulma.io">
-			      <img src="https://bulma.io/images/made-with-bulma--black.png" alt="Made with Bulma" width="128" height="24" />
-			      </a>
-			    </div>
+			<button className="button is-rounded" onClick={this.signOutCurrentUser}>Sign Out</button>
+			<br /><br />
+			<div style={{width: "20vw", position: 'relative', left: '40%'}}>
+						<a href="https://apps.apple.com/us/app/quill-journal/id1552008916?itsct=apps_box&amp;itscg=30200" style={{display: "inlineBlock", overflow: "hidden", borderTopLeftRadius: "13px", borderTopRightRadius: '13px', borderBottomRightRadius: '13px', borderBottomRightRadius: '13px', width: "250px", height: "83px"}} >
+							<img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/white/en-US?size=250x83&amp;releaseDate=1612569600&h=b1704f64bbcc8e35d2f6e07d3d35cada" alt="Download on the App Store" style={{borderTopLeftRadius: "13px", borderTopRightRadius: '13px', borderBottomRightRadius: '13px', borderBottomRadius: '13px', width: "250px", height: "83px"}} />
+						</a>
 					</div>
-			   </footer>
+			<footer className="hero-foot">
+				<div className="content has-text-centered">
+					Made with <i className="fa fa-heart" style={{color: "rgb(235, 43, 86)"}}></i> & <i className="fa fa-coffee" style={{color: "rgb(44, 31, 22)"}}></i> in Orlando
+					<div className=" content has-text-centered">
+						<a href="https://bulma.io">
+							<img src="https://bulma.io/images/made-with-bulma--black.png" alt="Made with Bulma" width="128" height="24" />
+						</a>
+					</div>
+				</div>
+			</footer>
        </div>
     );
   }
