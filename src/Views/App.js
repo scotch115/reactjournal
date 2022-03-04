@@ -116,8 +116,8 @@ class App extends Component {
 					<div className="subtitle" style={{ fontSize: '2vh' }}>
 						<Today date={this.state.date} />
 					</div>
-					<div style={{ position: 'absolute', right: '5vmin', top: '2vmin', cursor: 'pointer' }} onClick={() => window.open('/settings', '_self')}>
-						<ReactRoundedImage image={this.profilePicture} imageWidth="80" imageHeight="80" roundedSize='5' />
+					<div style={{ position: 'absolute', right: '5vmin', top: '2vmin', cursor: 'pointer', zIndex: 1 }} onClick={() => window.open('/settings', '_self')}>
+						<ReactRoundedImage image={this.profilePicture} imageWidth="90" imageHeight="90" roundedSize='5' />
 					</div>
 					<Button
 						className='p-button-rounded'
@@ -170,11 +170,6 @@ class App extends Component {
 						</div>
 					</div>
 				</div>
-				{/* <Button 
-				label="Sign Out"
-				className="p-button-rounded"
-				onClick={this.signOutCurrentUser}
-			/> */}
 				<br /><br />
 				<footer className="hero-foot">
 					<div className="content has-text-centered" style={{ cursor: 'pointer' }} onClick={() => window.open('https://jordangamache.io', '_self')}>
