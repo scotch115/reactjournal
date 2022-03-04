@@ -70,6 +70,15 @@ class Settings extends Component {
                     <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/white/en-US?size=250x83&amp;releaseDate=1612569600&h=b1704f64bbcc8e35d2f6e07d3d35cada" alt="Download on the App Store" style={{borderTopLeftRadius: "13px", borderTopRightRadius: '13px', borderBottomRightRadius: '13px', borderBottomRadius: '13px', width: "250px", height: "83px"}} />
                   </a>
                 </div>
+                {/* Need to check device type here to make sure phones cant download it */}
+                <Button
+                  label='Download for Mac'
+                  icon='pi pi-download'
+                  iconPos='left'
+                  className='p-button-raised'
+                  style={{ marginTop: '20px' }}
+                  onClick={() => window.open('files/Quill_Journal_macOS.dmg', 'download')}
+                />
               </div>
               <div style={{ position: 'absolute', bottom: '50px', display: 'flex', width: '100vw', justifyContent: 'center' }}>
                 <Button
@@ -127,6 +136,15 @@ class Settings extends Component {
                     <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/white/en-US?size=250x83&amp;releaseDate=1612569600&h=b1704f64bbcc8e35d2f6e07d3d35cada" alt="Download on the App Store" style={{borderTopLeftRadius: "13px", borderTopRightRadius: '13px', borderBottomRightRadius: '13px', borderBottomRadius: '13px', width: "250px", height: "83px"}} />
                   </a>
                 </div>
+                {/* Need to check device type here to make sure phones cant download it */}
+                <Button
+                  label='Download for Mac'
+                  icon='pi pi-download'
+                  iconPos='left'
+                  className='p-button-raised'
+                  style={{ marginTop: '20px' }}
+                  onClick={() => window.open('files/Quill_Journal_macOS.dmg', 'download')}
+                />
               </div>
               <div style={{ position: 'absolute', bottom: '50px', display: 'flex', width: '100vw', justifyContent: 'center' }}>
                 <Button
