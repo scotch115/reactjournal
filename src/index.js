@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './Login';
 import New from './New';
+import Settings from './Settings';
 import { Route, BrowserRouter, Switch } from 'react-router-dom';
 
 const routing = (
@@ -10,6 +11,7 @@ const routing = (
       <Switch>
         <Route exact path="/" component={App}/> 
         <Route path="/new-entry" component={New} />
+        <Route path="/settings" component={Settings} />
       </Switch>
     </div>
   </BrowserRouter>

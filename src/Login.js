@@ -3,18 +3,19 @@ import firebase from 'firebase';
 import { DB_CONFIG } from './Config';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import App from './App';
+import Particles from 'react-tsparticles';
 
 class Login extends Component {
-    constructor(props) {
-        super(props);
-        this.app = !firebase.apps.length ? firebase.initializeApp(DB_CONFIG) : firebase.app();
+	constructor(props) {
+		super(props);
+		this.app = !firebase.apps.length ? firebase.initializeApp(DB_CONFIG) : firebase.app();
 		// this.database = this.app.database().ref().child('entries/');
 		this.database = this.app.database().ref('entries/');
 
 		this.state = {
 			isSignedIn: false
-        }
-        
+		}
+
 		const uiConfig = {
 			signInFlow: 'popup',
 			signInOptions: [
@@ -25,45 +26,137 @@ class Login extends Component {
 			callbacks: {
 				signInSuccessfulWithAuthResult: () => false
 			}
-        };
-        
-
-        this.state = {
-            entries: [],
-            isSignedIn: false,
-            uiConfig: uiConfig
+		};
+		this.state = {
+			entries: [],
+			isSignedIn: false,
+			uiConfig: uiConfig
 		}
-		
+
 	}
-	
+
 	componentDidMount() {
 		this.unregisterAuthObserver = firebase.auth().onAuthStateChanged(
-			(user) => this.setState({isSignedIn: !!user})
+			(user) => this.setState({ isSignedIn: !!user })
 		);
 	}
 
 	componentWillUnmount() {
 		this.unregisterAuthObserver = firebase.auth().onAuthStateChanged(
-			(user) => this.setState({isSignedIn: !!user})
+			(user) => this.setState({ isSignedIn: !!user })
 		);
 	}
-    
-    render() { 
-        if (!this.state.isSignedIn) {
-			return(
-				<div className="container box">
-					<div className=" title is-4 has-text-centered">React Journal</div>
-					<p className="has-text-centered">Please sign in:</p>
-					<StyledFirebaseAuth uiConfig={this.state.uiConfig} firebaseAuth={firebase.auth()} />
+
+	particlesInit(main) {
+		console.log(main);
+	};
+
+	particlesLoaded(container) {
+		console.log(container);
+	};
+
+	render() {
+		if (!this.state.isSignedIn) {
+			return (
+				<>
+					<Particles
+						id="tsparticles"
+						init={this.particlesInit()}
+						loaded={this.particlesLoaded()}
+						options={{
+							background: {
+								color: {
+									value: "#FFFFF",
+								},
+							},
+							fpsLimit: 120,
+							interactivity: {
+								events: {
+									onClick: {
+										enable: true,
+										mode: "push",
+									},
+									onHover: {
+										enable: true,
+										mode: "repulse",
+									},
+									resize: true,
+								},
+								modes: {
+									bubble: {
+										distance: 400,
+										duration: 2,
+										opacity: 0.8,
+										size: 40,
+									},
+									push: {
+										quantity: 4,
+									},
+									repulse: {
+										distance: 200,
+										duration: 0.4,
+									},
+								},
+							},
+							particles: {
+								color: {
+									value: "#aaaaaa",
+								},
+								links: {
+									color: "#aaaaaa",
+									distance: 150,
+									enable: true,
+									opacity: 1,
+									width: 1,
+								},
+								collisions: {
+									enable: true,
+								},
+								move: {
+									direction: "none",
+									enable: true,
+									outMode: "bounce",
+									random: false,
+									speed: 2,
+									straight: false,
+								},
+								number: {
+									density: {
+										enable: true,
+										area: 800,
+									},
+									value: 80,
+								},
+								opacity: {
+									value: 1,
+								},
+								shape: {
+									type: "circle",
+								},
+								size: {
+									random: true,
+									value: 5,
+								},
+							},
+							detectRetina: true,
+						}}
+					/>
+					<div
+						className="box"
+						style={{ position: 'relative', top: (window.screen.width) ? '20vh' : '10vh', width: (window.screen.width <= 415) ? '300px' : '400px', display: 'flexbox', justifyContent: 'center', margin: 'auto' }}
+					>
+						<p style={{ fontSize: (window.screen.width <= 415) ? '5vh' : '8vh', fontWeight: 'bold', textAlign: 'end', display: 'inline-flex', width: '100%', justifyContent: 'end', paddingRight: '10%' }}>Hello<br /> There.</p>
+						<StyledFirebaseAuth uiConfig={this.state.uiConfig} firebaseAuth={firebase.auth()} />
 					</div>
+				</>
 			)
-        } else {
+		} else {
 			console.log('Signed in and returning to App');
-            return(
+			return (
 				<App />
 			)
-        };
-    }
+		};
+	}
 }
- 
+
 export default Login;
