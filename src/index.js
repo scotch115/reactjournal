@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './Login';
-import New from './New';
-import Settings from './Settings';
+import App from './Views/Login';
+import New from './Views/New';
+import Settings from './Views/Settings';
 import { Route, BrowserRouter, Switch } from 'react-router-dom';
 
 const routing = (
